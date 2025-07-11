@@ -35,11 +35,7 @@ class Logger(object):
 
         img_summaries = []
         for i, img in enumerate(images):
-            # Write the image to a string
-            try:
-                s = StringIO()
-            except:
-                s = BytesIO()
+            s = BytesIO()
             scipy.misc.toimage(img).save(s, format="png")
 
             # Create an Image object
