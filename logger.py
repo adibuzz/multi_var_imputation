@@ -4,10 +4,8 @@ import tensorflow as tf
 # tf.disable_v2_behavior()
 import numpy as np
 import scipy.misc
-try:
-    from StringIO import StringIO  # Python 2.7
-except ImportError:
-    from io import BytesIO         # Python 3.x
+
+from io import BytesIO         # Python 3.x
 
 
 class Logger(object):
