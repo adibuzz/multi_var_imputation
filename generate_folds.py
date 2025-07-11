@@ -3,18 +3,19 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import os
 
-N = pd.read_csv("Item3.csv")["ID"].nunique()
-full_idx = np.arange(N)
-Nfolds = 5
+def generate_folds(csv_path, n_folds=5, test_size=0.1, val_size=0.2, seed=432, simulation_name='mimic'):
+    N = pd.read_csv(csv_path)["ID"].nunique()
+    indices = np.arange(N)
+    np.random.seed(seed)
 
-np.random.seed(432)
-simulation_name = 'mimic'
-for fold in range(Nfolds):
-    train_idx, test_idx = train_test_split(np.arange(N),test_size=0.1)
-    train_idx, val_idx = train_test_split(train_idx,test_size=0.2)
-    fold_dir = f"{simulation_name}_fold_idx_{fold}/"
-    if not os.path.exists(fold_dir):
-        os.makedirs(fold_dir)
-    np.save(fold_dir+f"train_idx.npy",train_idx)
-    np.save(fold_dir+f"val_idx.npy",val_idx)
-    np.save(fold_dir+f"test_idx.npy",test_idx)
+    for fold in range(n_folds):
+        train_idx, test_idx = train_test_split(indices, test_size=test_size, random_state=seed + fold)
+        train_idx, val_idx = train_test_split(train_idx, test_size=val_size, random_state=seed + fold)
+        fold_dir = f"{simulation_name}_fold_idx_{fold}/"
+        os.makedirs(fold_dir, exist_ok=True)
+        np.save(os.path.join(fold_dir, "train_idx.npy"), train_idx)
+        np.save(os.path.join(fold_dir, "val_idx.npy"), val_idx)
+        np.save(os.path.join(fold_dir, "test_idx.npy"), test_idx)
+
+if __name__ == "__main__":
+    generate_folds("Item3.csv")
