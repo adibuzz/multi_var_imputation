@@ -68,6 +68,11 @@ WITH d_calc AS (
             ORDER BY CAST(intime AS timestamp)
         ) AS previous_outtime
     FROM ICUSTAYS
+    WHERE SUBJECT_ID IN (
+        SELECT SUBJECT_ID
+        FROM PATIENTS
+        WHERE CAST(anchor_age AS INT) BETWEEN 30 AND 35
+    )
 ),
 d_days AS (
     SELECT
@@ -106,14 +111,14 @@ chartevents_filtered AS (
                     220227, 223761, 225690, 220650)
         AND SUBJECT_ID IN (SELECT SUB_ID FROM d_days_filtered_subject_id)
 )
-SELECT *
+SELECT SUBJECT_ID, charttime, itemid, valuenum
 FROM (
     SELECT *,
            unix_timestamp(charttime) AS chart_ts,
            MAX(unix_timestamp(charttime)) OVER (PARTITION BY SUBJECT_ID) AS max_chart_ts
     FROM chartevents_filtered
 )
-WHERE chart_ts >= max_chart_ts - 48*3600
+WHERE chart_ts >= max_chart_ts - 24*3600
 ORDER BY SUBJECT_ID, charttime
 """
 
@@ -127,10 +132,10 @@ print(f"Number of unique SUBJECT_IDs: {len(subject_ids)}")
 output_base_path = "./Readmitted_patients"
 
 for subject_id in subject_ids:
-    # print(f"Processing SUBJECT_ID: {subject_id}")
+    print(f"Processing SUBJECT_ID: {subject_id}")
 
     # Filter the result for the current subject_id
-    filtered_df = result.filter(result.subject_id == subject_id)
+    filtered_df = result.filter(result.SUBJECT_ID == subject_id)
     # Remove null values in the 'valuenum' column
     filtered_df = filtered_df.filter(filtered_df.valuenum.isNotNull())
 
@@ -144,6 +149,7 @@ for subject_id in subject_ids:
 
 
 # Convert to py file from notebook
-print(f"Data for {len(subject_ids)} patients has been saved to {output_base_path} in Parquet format.")
-spark.stop()
+# print(f"Data for {len(subject_ids)} patients has been saved to {output_base_path} in Parquet format.")
+# spark.stop()
+
 
