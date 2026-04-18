@@ -185,7 +185,7 @@ def train_gruode(simulation_name, params_dict, device, train_idx, val_idx, epoch
 
 if __name__ == "__main__":
     simulation_name = "mimic"
-    device = torch.device("cpu")
+    device = torch.device("cuda")
     fold = '1'
 
     train_idx = np.load(rf"mimic_fold_idx_{fold}/train_idx.npy", allow_pickle=True)
