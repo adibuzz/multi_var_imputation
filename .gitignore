@@ -1,0 +1,10 @@
+__pycache__/
+.venv/
+demo_tables/
+full_tables/
+demo_patient_measurements_48h/
+patient_measurements_48h/
+sample_patients/*
+Readmitted_patients/
+spark-warehouse/
+spark_conf/
