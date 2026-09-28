@@ -5,16 +5,7 @@
 /Readmitted_patients
 /sample_patients
 /figures
-admissions.csv
-chartevents.csv
-d_icd_diagnoses.csv
-d_items.csv
-d_labitems.csv
-patients.csv
-diagnoses_icd.csv
-icustays.csv
 /.vscode/
-venv/
 __pycache__/
 .venv/
 demo_tables/
@@ -25,3 +16,6 @@ sample_patients/*
 Readmitted_patients/
 spark-warehouse/
 spark_conf/
+checker-files-from-Claude-Code/
+older-unused-files/
+test-files-by-Claude-Code/
